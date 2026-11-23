@@ -1,0 +1,5 @@
+openai>=1.40,<3      # beta.chat.completions.parse (structured outputs) needs >=1.40
+pydantic>=2.6,<3
+fastapi>=0.110
+uvicorn>=0.29
+scipy>=1.11          # Welch t-test in evaluate.py

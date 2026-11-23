@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phishing Arena · D1–D5 SOC Console</title>
+<style>
+:root{--ink:#070b12;--panel:#0d141f;--panel2:#111b29;--line:#1c2a3d;--tx:#e6edf6;--mut:#7f90a8;
+--ok:#2dd4a0;--warn:#f5b13d;--bad:#ff5470;--acc:#5ab8ff;
+--mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;--sans:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 500px at 85% -10%,#12304d55,transparent),var(--ink);color:var(--tx);font:14px/1.5 var(--sans)}
+header{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;padding:1.1rem 2rem;border-bottom:1px solid var(--line);position:sticky;top:0;background:#070b12ee;backdrop-filter:blur(8px);z-index:5}
+.brand{display:flex;gap:.8rem;align-items:center}
+.logo{width:34px;height:34px;border:2px solid var(--acc);border-radius:50% 50% 50% 8px;display:grid;place-items:center;font:700 13px var(--mono);color:var(--acc)}
+h1{margin:0;font-size:1.05rem;letter-spacing:.02em}
+.sub{font:11px var(--mono);color:var(--mut);text-transform:uppercase;letter-spacing:.12em}
+.pill{font:11px var(--mono);padding:.2rem .6rem;border:1px solid var(--line);border-radius:99px;color:var(--mut)}
+.pill i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mut);margin-right:.4rem}
+.pill.on i{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+main{max-width:1320px;margin:1.5rem auto;padding:0 1.5rem;display:grid;gap:1.25rem}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+.g2{display:grid;grid-template-columns:1fr 1.15fr;gap:1.25rem}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.2rem}
+h2{margin:0 0 .9rem;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.k b{display:block;font:600 2rem/1.1 var(--mono);margin:.25rem 0 .5rem}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}.bar>div{height:100%;background:var(--acc);transition:width .6s}
+label{display:block;font:11px var(--mono);color:var(--mut);margin:.65rem 0 .2rem;text-transform:uppercase}
+input,textarea,select{width:100%;padding:.55rem .65rem;background:var(--ink);color:var(--tx);border:1px solid var(--line);border-radius:7px;font:13px var(--mono)}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--acc);outline-offset:-1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+button{font:600 13px var(--sans);padding:.55rem 1rem;border-radius:7px;border:1px solid var(--acc);background:var(--acc);color:#04243d;cursor:pointer}
+button.ghost{background:transparent;color:var(--acc)}button:disabled{opacity:.5;cursor:wait}
+button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.act{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+.tag{font:600 11px var(--mono);padding:.15rem .55rem;border-radius:5px;display:inline-block}
+.ok{color:var(--ok);background:#2dd4a01f}.warn{color:var(--warn);background:#f5b13d1f}.bad{color:var(--bad);background:#ff54701f}
+.big{font:600 2.6rem/1 var(--mono)}
+.gauge{position:relative;height:12px;border-radius:6px;margin:.8rem 0 1.4rem;background:linear-gradient(90deg,var(--ok) 0 42%,var(--warn) 42% 72%,var(--bad) 72% 100%);opacity:.9}
+.gauge u{position:absolute;top:-5px;width:3px;height:22px;background:#fff;border-radius:2px;transition:left .5s;text-decoration:none}
+.gauge span{position:absolute;top:16px;font:10px var(--mono);color:var(--mut);transform:translateX(-50%)}
+.mail{background:var(--ink);border:1px solid var(--line);border-radius:8px;padding:.7rem .85rem;margin:.9rem 0;font-size:13px}
+.mail div{font:12px var(--mono);color:var(--mut)}.mail p{margin:.4rem 0 0;color:var(--tx);white-space:pre-wrap}
+.sp{padding:.65rem 0;border-top:1px solid var(--line)}
+.sp .h{display:flex;justify-content:space-between;gap:1rem;font:600 12px var(--mono)}
+.sp .b{height:6px;background:var(--line);border-radius:4px;margin:.4rem 0}.sp .b>div{height:100%;border-radius:4px}
+.sp small{color:var(--mut);font-size:12px}
+.cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font:11px var(--mono);color:var(--mut);align-items:center;text-align:center}
+.cm .c{border-radius:8px;padding:1rem .5rem;color:var(--tx)}.cm .c b{display:block;font-size:1.8rem}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mut);text-align:left;padding:.5rem}
+td{padding:.55rem .5rem;border-top:1px solid var(--line)}tbody tr{cursor:pointer}tbody tr:hover{background:var(--panel2)}
+.wrap{overflow-x:auto}.tac{display:grid;grid-template-columns:minmax(120px,210px) 1fr auto;gap:.7rem;align-items:center;margin:.45rem 0;font-size:12px}
+.stk{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--line)}
+.empty{color:var(--mut);padding:1rem 0;font-size:13px}
+#toast{position:fixed;right:1.2rem;bottom:1.2rem;background:#2a0f17;border:1px solid var(--bad);color:#ffd5dc;padding:.7rem 1rem;border-radius:8px;max-width:360px;display:none;z-index:9}
+footer{text-align:center;color:var(--mut);font:11px var(--mono);padding:1rem 1rem 2rem}
+.spin{animation:s 1s linear infinite;display:inline-block}@keyframes s{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">D5</div>
+    <div><h1>AI vs. AI Phishing Arena</h1><div class="sub">Red team · D1–D5 SOC consensus</div></div></div>
+  <div class="act" style="margin:0;align-items:center">
+    <span class="pill" id="status"><i></i>checking API…</span>
+    <button id="b-phish" onclick="runRound(false)">Simulate phishing round</button>
+    <button id="b-benign" class="ghost" onclick="runRound(true)">Simulate benign round</button>
+  </div>
+</header>
+
+<main>
+  <section class="kpis" id="kpis" aria-label="Key metrics"></section>
+
+  <div class="g2">
+    <section class="card">
+      <h2>Inspect an email</h2>
+      <label for="preset">Example</label>
+      <select id="preset" onchange="loadPreset(this.value)">
+        <option value="0">Lookalike MFA lure (SPF/DKIM pass)</option>
+        <option value="1">Routine internal update</option>
+        <option value="2">Manager spoof with failing auth</option>
+      </select>
+      <div class="row"><div><label for="in-sender">Sender</label><input id="in-sender"></div>
+      <div><label for="in-reply">Reply-To</label><input id="in-reply"></div></div>
+      <div class="row"><div><label for="in-spf">SPF</label><select id="in-spf"><option>PASS</option><option>SOFTFAIL</option><option>FAIL</option><option>NONE</option></select></div>
+      <div><label for="in-dkim">DKIM</label><select id="in-dkim"><option>PASS</option><option>FAIL</option><option>NONE</option></select></div></div>
+      <label for="in-display">Display name</label><input id="in-display">
+      <label for="in-subject">Subject</label><input id="in-subject">
+      <label for="in-body">Body · use [SIMULATED_LINK] for links</label><textarea id="in-body" rows="4"></textarea>
+      <div class="act"><button id="b-scan" onclick="scan()">Run D1–D5 inspection</button></div>
+    </section>
+
+    <section class="card" aria-live="polite">
+      <h2>Verdict &amp; specialist votes</h2>
+      <div id="verdict" class="empty">Run an inspection, simulate a round, or click a row below.</div>
+    </section>
+  </div>
+
+  <div class="g2">
+    <section class="card"><h2>Confusion matrix</h2><div id="cm"></div></section>
+    <section class="card"><h2>Phishing outcome by pretext</h2><div id="tac"></div></section>
+  </div>
+
+  <section class="card"><h2>Recent rounds</h2>
+    <div class="wrap"><table><thead><tr><th>#</th><th>Target</th><th>Dept</th><th>Truth</th><th>Pretext</th><th>Votes</th><th>Action</th><th>Score</th><th>Outcome</th></tr></thead>
+    <tbody id="rows"></tbody></table></div>
+  </section>
+</main>
+<footer>Synthetic sandbox: reserved .test / example.* domains only, zero live URLs. Metrics reflect this simulated traffic, not real mail.</footer>
+<div id="toast" role="alert"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=v=>(v*100).toFixed(1)+'%';
+const cls=a=>a==='ALLOW'?'ok':a==='QUARANTINE'?'warn':'bad';
+const outCls=o=>/^T/.test(o)?'ok':/^FP/.test(o)?'warn':'bad';
+let rounds=[];
+
+async function api(path,opt){
+  const r=await fetch(path,opt); let d={};
+  try{d=await r.json()}catch{}
+  if(!r.ok) throw new Error(typeof d.detail==='string'?d.detail:'Request failed ('+r.status+')');
+  return d;
+}
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',6000)}
+
+const PRESETS=[
+ {s:'support@okta-sso-support.test',r:'support@okta-sso-support.test',spf:'PASS',dkim:'PASS',d:'Okta Support',sub:'Action required: Passkey & MFA policy sync',b:'Hi Arjun, please verify your MFA configuration via [SIMULATED_LINK] before EOD to avoid SSO lockout.'},
+ {s:'elena.rostova@acme-corp.test',r:'elena.rostova@acme-corp.test',spf:'PASS',dkim:'PASS',d:'Elena Rostova',sub:'Passkey rollout: Thursday sync',b:'Hi Arjun, let us review the Passkey enforcement timeline on Thursday at 10 AM.'},
+ {s:'elena.rostova@exec-mail.test',r:'ceo-desk@other-mail.test',spf:'FAIL',dkim:'FAIL',d:'Elena Rostova',sub:'Urgent wire request',b:'Arjun, I need a wire sent today. Confirm the routing details via [SIMULATED_LINK].'}];
+function loadPreset(i){const p=PRESETS[i];$('in-sender').value=p.s;$('in-reply').value=p.r;$('in-spf').value=p.spf;$('in-dkim').value=p.dkim;$('in-display').value=p.d;$('in-subject').value=p.sub;$('in-body').value=p.b}
+
+function renderKpis(st){
+  const m=st.metrics,items=[['Rounds',st.total_rounds,null],['Precision',pct(m.precision),m.precision],['Recall',pct(m.recall),m.recall],['Accuracy',pct(m.accuracy),m.accuracy],['F1',pct(m.f1),m.f1]];
+  $('kpis').innerHTML=items.map(([l,v,b])=>`<div class="card k"><h2>${l}</h2><b>${esc(v)}</b><div class="bar"><div style="width:${b==null?0:b*100}%"></div></div></div>`).join('');
+}
+function renderCm(c){
+  const cell=(v,t,col)=>`<div class="c" style="background:${col}"><b>${v}</b>${t}</div>`;
+  $('cm').innerHTML=`<div class="cm"><span></span><span>flagged</span><span>allowed</span>
+   <span>phish</span>${cell(c.TP,'true positive','#2dd4a02a')}${cell(c.FN,'missed','#ff54702a')}
+   <span>benign</span>${cell(c.FP,'false alarm','#f5b13d2a')}${cell(c.TN,'true negative','#2dd4a02a')}</div>`;
+}
+function renderTac(t){
+  const k=Object.keys(t);
+  $('tac').innerHTML=k.length?k.map(n=>{const x=t[n],tot=x.total||1;
+   return `<div class="tac"><span>${esc(n)}</span><div class="stk"><div style="width:${x.blocked/tot*100}%;background:var(--ok)"></div><div style="width:${x.breached/tot*100}%;background:var(--bad)"></div></div><span style="font:12px var(--mono)">${x.blocked}/${x.total} caught</span></div>`}).join('')
+   +'<div class="empty">green = caught · red = breached</div>':'<div class="empty">No phishing rounds yet.</div>';
+}
+function renderRows(){
+  $('rows').innerHTML=rounds.length?rounds.map((r,i)=>`<tr onclick="show(${i})" tabindex="0" onkeydown="if(event.key==='Enter')show(${i})">
+   <td>${esc(r.round_id)}</td><td>${esc(r.target_employee)}</td><td>${esc(r.department||'-')}</td>
+   <td>${r.is_phishing?'PHISH':'BENIGN'}</td><td>${esc(r.chosen_tactic||'-')}</td><td>${esc(r.verdict?.specialist_votes_yes??'-')}/4</td>
+   <td><span class="tag ${cls(r.defender_action)}">${esc(r.defender_action)}</span></td><td style="font-family:var(--mono)">${esc(r.risk_score)}</td>
+   <td><span class="tag ${outCls(r.outcome)}">${esc(r.outcome)}</span></td></tr>`).join(''):'<tr><td colspan="9" class="empty">No rounds logged yet. Simulate one above.</td></tr>';
+}
+function show(i){const r=rounds[i];renderVerdict(r.verdict,r.artifact?.email)}
+
+function renderVerdict(v,email){
+  if(!v||!v.stage_breakdown)return;
+  const sc=v.aggregate_risk_score;
+  const mail=email?`<div class="mail"><div>From ${esc(email.sender_display)} &lt;${esc(email.sender_address)}&gt; · SPF ${esc(email.spf_status)} · DKIM ${esc(email.dkim_status)}</div><strong>${esc(email.subject)}</strong><p>${esc(email.body)}</p></div>`:'';
+  $('verdict').className='';
+  $('verdict').innerHTML=`<div style="display:flex;align-items:baseline;gap:1rem"><span class="big">${esc(sc)}</span><span class="tag ${cls(v.final_action)}">${esc(v.final_action)}</span><span class="sub">${esc(v.specialist_votes_yes)}/4 votes</span></div>
+   <div class="gauge"><u style="left:calc(${Math.min(sc,1)*100}% - 1px)"></u><span style="left:42%">0.42</span><span style="left:72%">0.72</span></div>${mail}`
+   +v.stage_breakdown.map(s=>{const c=s.flagged?'var(--bad)':'var(--ok)';
+    return `<div class="sp"><div class="h"><span>${esc(s.specialist_id)} · ${esc(s.stage_name.replace(/^D\d_/,'').replace(/_/g,' '))} <span style="color:var(--mut)">w=${esc(s.weight)}</span></span><span style="color:${c}">${s.risk_score.toFixed(2)} ${s.flagged?'FLAG':'clear'}</span></div>
+    <div class="b"><div style="width:${s.risk_score*100}%;background:${c}"></div></div><small>${esc((s.flags||[]).join(' · '))}</small></div>`}).join('')
+   +`<div class="sp"><small>D5: score = max(Σ wᵢ·sᵢ, 0.85 × top specialist)</small></div>`;
+}
+
+async function load(){
+  try{
+    const [st,rd]=await Promise.all([api('/api/v1/arena/stats'),api('/api/v1/arena/rounds?limit=25')]);
+    renderKpis(st);renderCm(st.confusion_matrix);renderTac(st.by_tactic);rounds=rd.rounds;renderRows();
+  }catch(e){toast(e.message)}
+}
+async function health(){
+  try{const h=await api('/api/v1/health');$('status').className='pill on';$('status').innerHTML=`<i></i>${esc(h.provider)} · ${esc(h.defender.split('/').pop())}`}
+  catch{$('status').className='pill';$('status').innerHTML='<i></i>API offline'}
+}
+async function busy(btn,label,fn){
+  const old=btn.textContent;btn.disabled=true;btn.innerHTML=`<span class="spin">◐</span> ${label}`;
+  try{await fn()}catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
+}
+const scan=()=>busy($('b-scan'),'Scanning…',async()=>{
+  const v=await api('/api/v1/arena/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    sender_display:$('in-display').value,sender_address:$('in-sender').value,reply_to_address:$('in-reply').value,
+    spf_status:$('in-spf').value,dkim_status:$('in-dkim').value,subject:$('in-subject').value,body:$('in-body').value})});
+  renderVerdict(v,{sender_display:$('in-display').value,sender_address:$('in-sender').value,spf_status:$('in-spf').value,dkim_status:$('in-dkim').value,subject:$('in-subject').value,body:$('in-body').value});
+});
+const runRound=b=>busy($(b?'b-benign':'b-phish'),'Running (≈15 s)…',async()=>{
+  const d=await api('/api/v1/arena/simulate-one',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({force_benign:b})});
+  renderVerdict(d.verdict,d.artifact.email);await load();
+});
+loadPreset(0);health();load();
+</script>
+</body>
+</html>
