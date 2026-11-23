@@ -1,0 +1,132 @@
+{
+  "n": 100,
+  "window": 10,
+  "TP": 75,
+  "FN": 0,
+  "FP": 3,
+  "TN": 22,
+  "phish": 75,
+  "benign": 25,
+  "precision": 0.9615384615384616,
+  "recall": 1.0,
+  "accuracy": 0.97,
+  "f1": 0.9803921568627451,
+  "error_rate": 0.03,
+  "specificity": 0.88,
+  "runs": 1,
+  "windows": [
+    {
+      "bucket": 1,
+      "n": 10,
+      "accuracy": 0.9,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 2,
+      "n": 10,
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 3,
+      "n": 10,
+      "accuracy": 0.9,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 4,
+      "n": 10,
+      "accuracy": 0.9,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 5,
+      "n": 10,
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 6,
+      "n": 10,
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 7,
+      "n": 10,
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 8,
+      "n": 10,
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 9,
+      "n": 10,
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "bypass": 0.0
+    },
+    {
+      "bucket": 10,
+      "n": 10,
+      "accuracy": 1.0,
+      "recall": 1.0,
+      "bypass": 0.0
+    }
+  ],
+  "trend_t": 2.4494897427831854,
+  "trend_p": 0.07048399691021938,
+  "variance": 0.0023333333333333322,
+  "by_tactic": {
+    "SaaS Collaboration / Shared Document": {
+      "n": 13,
+      "bypass_rate": 0.0
+    },
+    "IT Credential / MFA Policy": {
+      "n": 13,
+      "bypass_rate": 0.0
+    },
+    "HR Benefits / Compliance": {
+      "n": 12,
+      "bypass_rate": 0.0
+    },
+    "Legal / Compliance Audit Notice": {
+      "n": 12,
+      "bypass_rate": 0.0
+    },
+    "Routine Vendor Invoice": {
+      "n": 13,
+      "bypass_rate": 0.0
+    },
+    "Authority / Executive Request": {
+      "n": 12,
+      "bypass_rate": 0.0
+    }
+  },
+  "attacker_ms": 13298.693018609956,
+  "defender_ms": 795.6443536400184,
+  "attacker_tokens": 2359.11,
+  "defender_tokens": 1612.98,
+  "round_ms": 14094.337372249975,
+  "url_leaks": 0,
+  "ip_leaks": 0,
+  "unsafe_addresses": 0,
+  "header_leak_audit": {
+    "phish_auth_any_fail": 72,
+    "phish_auth_both_fail": 72,
+    "benign_auth_any_fail": 0,
+    "phish_from_trusted_domain": 0
+  }
+}
